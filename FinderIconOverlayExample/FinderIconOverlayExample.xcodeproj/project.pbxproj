@@ -13,6 +13,8 @@
 		B6D6C5CE157594F6004C9D51 /* ListViewIconOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D6C5CD157594F5004C9D51 /* ListViewIconOverlay.m */; };
 		B6D6C5D115759507004C9D51 /* IconViewIconOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = B6D6C5D015759507004C9D51 /* IconViewIconOverlay.m */; };
 		B6D6C5D3157595B7004C9D51 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6D6C5D2157595B7004C9D51 /* Quartz.framework */; };
+		CA66E7EF16DE6D5500A3F523 /* DesktopViewIconOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = CA66E7EE16DE6D5500A3F523 /* DesktopViewIconOverlay.m */; };
+		CA66E7F316DE6DC500A3F523 /* TFENodeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = CA66E7F216DE6DC500A3F523 /* TFENodeHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,10 @@
 		B6D6C5D015759507004C9D51 /* IconViewIconOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IconViewIconOverlay.m; sourceTree = "<group>"; };
 		B6D6C5D2157595B7004C9D51 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		B6D6C5D41575962B004C9D51 /* Finder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Finder.h; sourceTree = "<group>"; };
+		CA66E7ED16DE6D5500A3F523 /* DesktopViewIconOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesktopViewIconOverlay.h; sourceTree = "<group>"; };
+		CA66E7EE16DE6D5500A3F523 /* DesktopViewIconOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesktopViewIconOverlay.m; sourceTree = "<group>"; };
+		CA66E7F116DE6DC500A3F523 /* TFENodeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFENodeHelper.h; sourceTree = "<group>"; };
+		CA66E7F216DE6DC500A3F523 /* TFENodeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFENodeHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +100,10 @@
 				B6D6C5CD157594F5004C9D51 /* ListViewIconOverlay.m */,
 				B6D6C5CF15759507004C9D51 /* IconViewIconOverlay.h */,
 				B6D6C5D015759507004C9D51 /* IconViewIconOverlay.m */,
+				CA66E7ED16DE6D5500A3F523 /* DesktopViewIconOverlay.h */,
+				CA66E7EE16DE6D5500A3F523 /* DesktopViewIconOverlay.m */,
+				CA66E7F116DE6DC500A3F523 /* TFENodeHelper.h */,
+				CA66E7F216DE6DC500A3F523 /* TFENodeHelper.m */,
 			);
 			path = FinderIconOverlayExample;
 			sourceTree = "<group>";
@@ -173,6 +183,8 @@
 				B6D6C5CB15759468004C9D51 /* FinderIconOverlayExample.m in Sources */,
 				B6D6C5CE157594F6004C9D51 /* ListViewIconOverlay.m in Sources */,
 				B6D6C5D115759507004C9D51 /* IconViewIconOverlay.m in Sources */,
+				CA66E7EF16DE6D5500A3F523 /* DesktopViewIconOverlay.m in Sources */,
+				CA66E7F316DE6DC500A3F523 /* TFENodeHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +290,7 @@
 				B6D6C5C815759400004C9D51 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

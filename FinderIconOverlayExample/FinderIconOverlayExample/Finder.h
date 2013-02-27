@@ -29,9 +29,17 @@ typedef struct {
     struct TFENode *_M_end_of_storage;
 } _Vector_impl_6bc0f568;
 
+/*
+ struct TFENodeVector {
+ _Vector_impl_6bc0f568 _M_impl;
+ };*/
+
 struct TFENodeVector {
-    _Vector_impl_6bc0f568 _M_impl;
+    struct TFENode *_begin;
+    struct TFENode *_end;
+    struct TFENode *_end_cap;
 };
+
 
 @class TListViewController, TTableViewShrinkToFitController;
 
@@ -554,12 +562,17 @@ typedef struct {
 
 @end
 
-@interface FINode : NSObject
-{
-    
-}
 
-+ (id)nodeWithFENode:(const struct TFENode *)arg1;
+@interface FINode
+// Old interface:
++ (FINode *)nodeWithFENode:(const struct TFENode *)node;
+@property(readonly) NSString *fullPath;
+
+// New interface:
++ (FINode *)nodeFromNodeRef:(struct OpaqueNodeRef *)nodeRef;
+@property(readonly) NSURL *previewItemURL;
+
+//+ (id)nodeWithFENode:(const struct TFENode *)arg1;
 + (struct TFENode)asFENode:(id)arg1;
 - (struct TFENode)feNode;
 - (struct TFENode)feNodeFollowingAliasChainSynchronously;
@@ -693,6 +706,8 @@ typedef struct {
 - (void)concludeDragOperation:(id)arg1;
 
 @end
+
+struct OpaqueNodeRef;
 
 struct TFENode {
     struct OpaqueNodeRef *fNodeRef;
@@ -979,4 +994,185 @@ struct TIconRef {
 
 
 
+@protocol TDesktopLayerDelegate
+- (void)drawLayer:(id)arg1 inContext:(struct CGContext *)arg2;
+@end
 
+
+
+@interface TDesktopLayer : NSObject
+{
+    id <TDesktopLayerDelegate> _delegate;
+    struct CGRect _frame;
+    CALayer *_layer;
+}
+
++ (id)overlayRootLayer;
++ (id)hostLayerForLevel:(int)arg1;
++ (id)rootLayer;
++ (void)setRootLayer:(id)arg1;
+@property(nonatomic) struct CGRect frame; // @synthesize frame=_frame;
+@property(nonatomic) id <TDesktopLayerDelegate> delegate; // @synthesize delegate=_delegate;
+- (void)orderBelow:(id)arg1;
+- (void)orderAbove:(id)arg1;
+- (void)orderFront;
+- (void)hide;
+- (void)show;
+- (void)drawLayer:(id)arg1 inContext:(struct CGContext *)arg2;
+- (void)setNeedsDisplay;
+- (id)caLayer;
+- (void)dealloc;
+- (id)init;
+- (id)initWithLevel:(int)arg1;
+
+@end
+
+@interface TDesktopIconSelectionLayer : NSObject <TDesktopLayerDelegate>
+{
+    double _iconSize;
+    struct CGPoint _anchorPoint;
+    TDesktopLayer *_layer;
+}
+
++ (struct CGImage *)selectionImageForIconSize:(double)arg1 extendedFrame:(const struct CGRect *)arg2;
++ (void)drawSelectionRectAtIconSize:(double)arg1 extendedFrame:(const struct CGRect *)arg2 context:(struct CGContext *)arg3;
++ (double)selectionRingThicknessForIconSize:(double)arg1;
++ (double)radiusForIconSize:(double)arg1;
++ (struct TColor)selectionBackgroundColor;
++ (double)ringExtraSizeForIconBackgroundAtIconSize:(double)arg1;
+@property(nonatomic) struct CGPoint anchorPoint; // @synthesize anchorPoint=_anchorPoint;
+@property(nonatomic) double iconSize; // @synthesize iconSize=_iconSize;
+- (void)hide;
+- (void)show;
+- (void)updateLayout;
+- (void)drawLayer:(id)arg1 inContext:(struct CGContext *)arg2;
+- (id)layer;
+- (id)init;
+- (struct CGImage *)selectionImage;
+- (struct CGRect)anchoredExtendedIconFrame;
+
+@end
+
+
+@interface TDesktopIcon : NSObject <TDesktopLayerDelegate>
+{
+    BOOL _visible;
+    struct CGPoint _anchorPoint;
+    int _iconSize;
+    struct TFENode _node;
+    BOOL _selected;
+    BOOL _springBlinkOff;
+    BOOL _opened;
+    BOOL _iconIsVisible;
+    BOOL _labelIsVisible;
+    BOOL _labelIsTruncated;
+    //struct TNSRef<NSImage *> _thumbnailImage;
+    BOOL _thumbnailIsDirty;
+    TDesktopLayer *_icon;
+    TDesktopLayer *_label;
+    TDesktopIconSelectionLayer *_selection;
+}
+
+@property(nonatomic) BOOL thumbnailIsDirty; // @synthesize thumbnailIsDirty=_thumbnailIsDirty;
+@property(readonly, nonatomic) BOOL labelIsTruncated; // @synthesize labelIsTruncated=_labelIsTruncated;
+@property(nonatomic) BOOL labelIsVisible; // @synthesize labelIsVisible=_labelIsVisible;
+@property(nonatomic) BOOL iconIsVisible; // @synthesize iconIsVisible=_iconIsVisible;
+@property(nonatomic) BOOL opened; // @synthesize opened=_opened;
+@property(nonatomic) BOOL springBlinkOff; // @synthesize springBlinkOff=_springBlinkOff;
+@property(nonatomic) BOOL selected; // @synthesize selected=_selected;
+@property(nonatomic) int iconSize; // @synthesize iconSize=_iconSize;
+@property(nonatomic) struct CGPoint anchorPoint; // @synthesize anchorPoint=_anchorPoint;
+@property(nonatomic) BOOL visible; // @synthesize visible=_visible;
+
+- (struct TFENode)node;
+@property(retain, nonatomic) NSImage *thumbnailImage; // @dynamic thumbnailImage;
+- (void)updateLayout;
+- (void)setNeedsDisplay;
+- (void)drawLayer:(id)arg1 inContext:(struct CGContext *)arg2;
+- (void)drawInContext:(struct CGContext *)arg1 forDrag:(BOOL)arg2;
+- (void)drawSelectionInContext:(struct CGContext *)arg1;
+- (void)drawExtraInfoInContext:(struct CGContext *)arg1;
+- (void)drawLabelInContext:(struct CGContext *)arg1 forDrag:(BOOL)arg2;
+- (void)drawLabelBackground:(struct CGContext *)arg1 forDrag:(BOOL)arg2;
+- (void)drawMultiLineLabelBackground:(struct CGContext *)arg1 bounds:(const struct CGRect *)arg2 rects:(struct CGRect [2])arg3 lineCount:(unsigned int)arg4 horizontalMargin:(double)arg5 flushLeft:(BOOL)arg6 scaleFactor:(double)arg7 hiliteColor:(const struct TColor *)arg8 selected:(BOOL)arg9 labelIndex:(int)arg10;
+- (void)drawSingleLineLabelBackground:(struct CGContext *)arg1 bounds:(const struct CGRect *)arg2 horizontalMargin:(double)arg3 scaleFactor:(double)arg4 hiliteColor:(const struct TColor *)arg5 selected:(BOOL)arg6 labelIndex:(int)arg7;
+- (void)drawIconInContext:(struct CGContext *)arg1;
+- (void)invalidateLabels;
+- (double)scaleFactor;
+- (void)setCGScaleFactor:(double)arg1;
+- (void)setContentsScale:(double)arg1 forLayer:(id)arg2;
+- (_Bool)selectionRectIsVisible;
+- (void)orderFront;
+- (void)hide;
+- (void)show;
+- (void)dealloc;
+- (id)initWithNode:(const struct TFENode *)arg1;
+
+@end
+
+
+@protocol IKImageBrowserDatasourceItemPrivate
+
+@optional
+- (id)statusInfo;
+- (id)statusInfoForCell:(id)arg1;
+- (BOOL)datasourceItemIsThreadSafe;
+- (id)IKImageRepresentationWithType:(id)arg1;
+- (id)inlinePreviewQuickLookClientProperties;
+- (struct CGRect)quickLookContentFrameForImageSize:(struct CGSize)arg1;
+- (struct OpaqueIconRef *)createAlternativeIconRepresentation;
+- (struct OpaqueIconRef *)createAlternativeIconRepresentationWithOptions:(id)arg1;
+- (id)imageToDrawForCell:(id)arg1;
+- (BOOL)isDimmed;
+- (BOOL)holesFlavor;
+- (struct __CFDictionary *)quickLookThumbnailOptions;
+- (id)_ikThumbnailImage;
+- (id)posterImage;
+- (double)aspectRatio;
+@end
+
+struct OpaqueNodeRef;
+/*
+ struct TFENode {
+ struct OpaqueNodeRef *fNodeRef;
+ };
+ */
+
+
+@interface FINode (ListView_Additions)
+- (id)dataForIdentifier:(id)arg1 fromDataSource:(id)arg2;
+@end
+
+@interface FINode (FINodeAdditions) <QLPreviewItem, IKImageBrowserDatasourceItemPrivate>
+- (id)statusInfoForCell:(id)arg1;
+- (id)statusInfo;
+- (double)statusProgress;
+- (id)statusString;
+- (unsigned long long)ubiquityStatus;
+- (id)copyImageRepresentation:(id *)arg1 options:(id)arg2;
+- (id)IKImageRepresentationWithType:(id)arg1;
+- (struct OpaqueIconRef *)createAlternativeIconRepresentationWithOptions:(id)arg1;
+- (BOOL)isDimmed;
+- (struct __CFDictionary *)quickLookThumbnailOptions;
+- (id)imageLabel;
+- (id)imageTitle;
+- (id)imageRepresentationType;
+- (id)imageUID;
+- (id)imageUIDForViewIdentifier:(id)arg1;
+- (id)imageRepresentationTypeForViewIdentifier:(id)arg1;
+- (BOOL)isInIconView;
+- (struct CGImage *)createImageForMaximumSize:(struct CGSize)arg1 options:(struct __CFDictionary *)arg2;
+- (id)previewItemLocalizedDescription;
+- (id)previewItemDisplayName;
+@property(readonly) NSString *previewItemTitle;
+@property(readonly) NSURL *previewItemURL;
+- (id)size:(BOOL)arg1;
+- (struct TFENode)feNodeFollowingAliasChainAsyncWithTarget:(id)arg1 okToLogin:(BOOL)arg2 tryToFixIfBroken:(BOOL)arg3;
+
+// Remaining properties
+@property(readonly) id previewItemDisplayState;
+@end
+
+@interface FINode (ListView_Additions)
+- (id)dataForIdentifier:(id)arg1 fromDataSource:(id)arg2;
+@end

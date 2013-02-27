@@ -9,6 +9,8 @@
 #import "FinderIconOverlayExample.h"
 #import "ListViewIconOverlay.h"
 #import "IconViewIconOverlay.h"
+#import "DesktopViewIconOverlay.h"
+
 
 @implementation FinderIconOverlayExample
 
@@ -27,6 +29,8 @@
 {
 	[ListViewIconOverlay pluginLoad];
     [IconViewIconOverlay pluginLoad];
+    [DesktopViewIconOverlay pluginLoad];
+    
 	return;
 }
 
